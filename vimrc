@@ -12,6 +12,12 @@ Plugin 'vim-airline/vim-airline'
 Plugin 'vim-airline/vim-airline-themes'
 Plugin 'Valloric/YouCompleteMe'           " Smart autocompleter
 Plugin 'tpope/vim-commentary'
+Plugin 'arcticicestudio/nord-vim', { 'branch': 'develop' }
+Plugin 'ryanoasis/vim-devicons'
+Plugin 'scrooloose/nerdtree'
+Plugin 'Xuyuanp/nerdtree-git-plugin'
+Plugin 'chriskempson/base16-vim'
+Plugin 'tpope/vim-fugitive'
 "Plugin 'SirVer/ultisnips'                 " snippets engine
 "Plugin 'altercation/vim-colors-solarized' " humane colors
 "Plugin 'Raimondi/delimitMate'             " handle pairs of parens, quotes, etc.
@@ -139,7 +145,8 @@ endif
 try
     " colorscheme desert
     " colorscheme solarized
-    colorscheme onehalfdark
+    "colorscheme onehalfdark
+    colorscheme nord
 catch
 endtry
 
@@ -184,13 +191,47 @@ vnoremap <silent> # :call VisualSelection('b', '')<CR>
 " Useful mappings for managing tabs
 map <A-D-Right> :tabnext<cr>
 map <A-D-Left> :tabprevious<cr>
-map <C-j> <C-W>j
-map <C-k> <C-W>k
-map <C-h> <C-W>h
-map <C-l> <C-W>l
-inoremap jk <Esc>
+nnoremap <C-J> <C-W><C-J>
+nnoremap <C-K> <C-W><C-K>
+nnoremap <C-L> <C-W><C-L>
+nnoremap <C-H> <C-W><C-H>
+inoremap jk <Esc>  
 vmap jk <Esc>  
+noremap <S-l> :bNext<CR>
+noremap <S-h> :bprevious<CR>
+"youcompleteme shortcut
+imap <Tab> <C-P>
+"Nerdtree toggle moving and Nerdtree config
+"""""""""""""""""""""""""""""""
+""""" NerdTRee Settings 
+map <C-n> :NERDTreeToggle<CR>
+let g:NERDTreeDirArrowExpandable = '▸'
+let g:NERDTreeDirArrowCollapsible = '▾'
+let g:NERDTreeIndicatorMapCustom = {
+    \ "Modified"  : "✹",
+    \ "Staged"    : "✚",
+    \ "Untracked" : "✭",
+    \ "Renamed"   : "➜",
+    \ "Unmerged"  : "═",
+    \ "Deleted"   : "✖",
+    \ "Dirty"     : "✗",
+    \ "Clean"     : "✔︎",
+    \ 'Ignored'   : '☒',
+    \ "Unknown"   : "?"
+    \ }
+let g:NERDTreeShowIgnoredStatus = 1
 
+autocmd StdinReadPre * let s:std_in=1
+autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
+
+autocmd StdinReadPre * let s:std_in=1
+autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists("s:std_in") | exe 'NERDTree' argv()[0] | wincmd p | ene | exe 'cd '.argv()[0] | endif
+
+autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+
+
+""""""""""""""""""""""""""""""
+""""" NerdTree end Settings
 " Return to last edit position when opening files (You want this!)
 autocmd BufReadPost *
      \ if line("'\"") > 0 && line("'\"") <= line("$") |
@@ -208,7 +249,7 @@ set laststatus=2
 " Format the status line
 " set statusline=%{HasPaste()}%t%m%r%h%w\ %l,%c,%p%%\ %y
 " airline config 
-let g:airline_theme='onehalfdark'
+let g:airline_theme='base16_nord'
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#formatter = 'unique_tail'
 let g:airline_powerline_fonts = 1 
